@@ -27,52 +27,105 @@ var getRandomTitleOffer = function (arrTitles) {
 };
 
 var getArrayRandomLength = function (arr) {
-  arr.length = getRandomIndexElement(arr);
-  return arr;
+  var newArr = arr.slice(0, getRandomIndexElement(arr));
+  return newArr;
 };
 
-var getRandomLocation = function (minX, maxX, minY, maxY) {
-  var coordinates = [];
+var createOffer = function () {
+  var coordinatesLocation = [getRandomNumber(300, 901), getRandomNumber(100, 501)];
+  var parameters = {
+    'author': {
+      'avatar': 'img/avatars/user' + getNumberAddressAvatar(USER_ADDRESS_NUMBERS) + '.png'
+    },
 
-  for (var i = 0; i < 8; i++) {
-    coordinates.push([getRandomNumber(minX, maxX), getRandomNumber(minY, maxY)]);
-  }
+    'offer': {
+      'title': getRandomTitleOffer(TITLES),
+      'address': coordinatesLocation[0] + ', ' + coordinatesLocation[1],
+      'price': getRandomNumber(1000, 1000001),
+      'type': getRandomElement(OFFER_TYPES),
+      'rooms': getRandomNumber(1, 6),
+      'guests': getRandomNumber(1, 10),
+      'checkin': getRandomElement(TIMES),
+      'checkout': getRandomElement(TIMES),
+      'features': getArrayRandomLength(FEATURES),
+      'description': '',
+      'photos': []
+    },
 
-  return coordinates;
+    'location': {
+      'x': coordinatesLocation[0],
+      'y': coordinatesLocation[1]
+    }
+  };
+
+  return parameters;
 };
-
-var coordinatesLocation = getRandomLocation(300, 901, 100, 501);
 
 var addObjects = function (numberOfObjects) {
-  var massive = [];
+  var Objects = [];
 
   for (var i = 0; i < numberOfObjects; i++) {
-    massive.push({
-      'author': {
-        'avatar': 'img/avatars/user' + getNumberAddressAvatar(USER_ADDRESS_NUMBERS)
-      },
-
-      'offer': {
-        'title': getRandomTitleOffer(TITLES),
-        'address': coordinatesLocation[i][0] + ', ' + coordinatesLocation[i][1],
-        'price': getRandomNumber(1000, 1000001),
-        'type': getRandomElement(OFFER_TYPES),
-        'rooms': getRandomNumber(1, 6),
-        'guests': getRandomNumber(1, 20),
-        'checkin': getRandomElement(TIMES),
-        'checkout': getRandomElement(TIMES),
-        'features': getArrayRandomLength(FEATURES),
-        'description': '',
-        'photos': []
-      },
-
-      'location': {
-        'x': coordinatesLocation[i][0],
-        'y': coordinatesLocation[i][1]
-      }});
+    Objects.push(createOffer());
   }
 
-  return massive;
+  return Objects;
 };
 
-var ads = addObjects(8);
+var listOfRentals = addObjects(8);
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+var mapListElement = map.querySelector('.map__pins');
+var template = document.querySelector('template').content;
+
+var renderMapPin = function (element) {
+  var mapPin = template.querySelector('.map__pin').cloneNode(true);
+
+  mapPin.style.left = element.location.x + 'px';
+  mapPin.style.top = element.location.y + 'px';
+  mapPin.querySelector('img').setAttribute('src', element.author.avatar);
+
+  return mapPin;
+};
+
+var renderMapCard = function (numberElement) {
+  var mapCard = template.querySelector('.map__card').cloneNode(true);
+
+  var getValueTypeOffer = function () {
+    if (listOfRentals[numberElement].offer.type === 'flat') {
+      return 'Квартира';
+    } else if (listOfRentals[numberElement].offer.type === 'bungalo') {
+      return 'Бунгало';
+    } else {
+      return 'Дом';
+    }
+  };
+
+  mapCard.querySelector('h3').textContent = listOfRentals[numberElement].offer.title;
+  mapCard.querySelector('small').textContent = listOfRentals[numberElement].offer.address;
+  mapCard.querySelector('.popup__price').innerHTML = listOfRentals[numberElement].offer.price + ' &#x20bd;/ночь';
+  mapCard.querySelector('h4').textContent = getValueTypeOffer();
+  mapCard.querySelector('h4').nextElementSibling.textContent = listOfRentals[numberElement].offer.rooms + ' для ' + listOfRentals[numberElement].offer.guests + ' гостей';
+  mapCard.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + listOfRentals[numberElement].offer.checkin + ', выезд до ' + listOfRentals[numberElement].offer.checkout;
+
+  for (var i = FEATURES.length - 1; i > listOfRentals[0].offer.features.length - 1; i--) {
+    var feature = mapCard.querySelector('.feature--' + FEATURES[i]);
+    mapCard.querySelector('.popup__features').removeChild(feature);
+  }
+
+  mapCard.querySelector('.popup__features').nextElementSibling.textContent = listOfRentals[numberElement].offer.description;
+  mapCard.querySelector('.popup__avatar').setAttribute('src', listOfRentals[numberElement].author.avatar);
+
+  return mapCard;
+};
+
+var fragment = document.createDocumentFragment();
+
+for (var i = 0; i < listOfRentals.length; i++) {
+  fragment.appendChild(renderMapPin(listOfRentals[i]));
+}
+
+fragment.appendChild(renderMapCard(0));
+
+mapListElement.appendChild(fragment);
