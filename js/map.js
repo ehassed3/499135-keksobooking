@@ -5,6 +5,8 @@ var TITLES = ['Большая уютная квартира', 'Маленька�
 var OFFER_TYPES = ['flat', 'house', 'bungalo'];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var NUMBER_OF_RENTALS = 8;
+var CARD_RENDER_NUMBER = 0;
 
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -71,7 +73,7 @@ var addObjects = function (numberOfObjects) {
   return Objects;
 };
 
-var listOfRentals = addObjects(8);
+var listOfRentals = addObjects(NUMBER_OF_RENTALS);
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -109,7 +111,7 @@ var renderMapCard = function (numberElement) {
   mapCard.querySelector('h4').nextElementSibling.textContent = listOfRentals[numberElement].offer.rooms + ' для ' + listOfRentals[numberElement].offer.guests + ' гостей';
   mapCard.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + listOfRentals[numberElement].offer.checkin + ', выезд до ' + listOfRentals[numberElement].offer.checkout;
 
-  for (var i = FEATURES.length - 1; i > listOfRentals[0].offer.features.length - 1; i--) {
+  for (var i = FEATURES.length - 1; i > listOfRentals[numberElement].offer.features.length - 1; i--) {
     var feature = mapCard.querySelector('.feature--' + FEATURES[i]);
     mapCard.querySelector('.popup__features').removeChild(feature);
   }
@@ -126,6 +128,6 @@ for (var i = 0; i < listOfRentals.length; i++) {
   fragment.appendChild(renderMapPin(listOfRentals[i]));
 }
 
-fragment.appendChild(renderMapCard(0));
+fragment.appendChild(renderMapCard(CARD_RENDER_NUMBER));
 
 mapListElement.appendChild(fragment);
