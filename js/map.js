@@ -88,8 +88,8 @@ var template = document.querySelector('template').content;
 var renderMapPin = function (element) {
   var mapPin = template.querySelector('.map__pin').cloneNode(true);
 
-  mapPin.style.left = element.location.x + 'px';
-  mapPin.style.top = element.location.y + 'px';
+  mapPin.style.left = element.location.x + 20 + 'px';
+  mapPin.style.top = element.location.y + 44 + 'px';
   mapPin.querySelector('img').setAttribute('src', element.author.avatar);
 
   return mapPin;
