@@ -41,7 +41,7 @@ var getArrayRandomLength = function (arr) {
 
 var createOffer = function (addressAvatar, indexTitle) {
   var coordinatesLocation = [getRandomNumber(300, 901), getRandomNumber(100, 501)];
-  var parameters = {
+  return {
     'author': {
       'avatar': 'img/avatars/user0' + addressAvatar + '.png'
     },
@@ -65,8 +65,6 @@ var createOffer = function (addressAvatar, indexTitle) {
       'y': coordinatesLocation[1]
     }
   };
-
-  return parameters;
 };
 
 var addObjects = function (numberOfObjects) {
