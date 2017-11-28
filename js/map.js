@@ -15,24 +15,17 @@ var getRandomElement = function (arr) {
   return arr[getRandomNumber(0, arr.length)];
 };
 
-var getArrayRandomLength = function (arr) {
+var getRandomArray = function (arr) {
   var newArr = [];
 
   while (newArr.length < arr.length) {
     var randomElement = getRandomElement(arr);
 
-    for (var i = 0; i < arr.length; i++) {
-      if (newArr[i] === randomElement) {
-        var check = false;
-        break;
-      } else {
-        check = true;
-      }
+    if (newArr.indexOf(randomElement) !== -1) {
+      continue;
     }
 
-    if (check === true) {
-      newArr.push(randomElement);
-    }
+    newArr.push(randomElement);
   }
 
   newArr = newArr.slice(0, getRandomNumber(0, newArr.length));
@@ -55,7 +48,7 @@ var createOffer = function (addressAvatar, indexTitle) {
       'guests': getRandomNumber(1, 10),
       'checkin': getRandomElement(TIMES),
       'checkout': getRandomElement(TIMES),
-      'features': getArrayRandomLength(FEATURES),
+      'features': getRandomArray(FEATURES),
       'description': '',
       'photos': []
     },
