@@ -43,7 +43,7 @@ var createOffer = function (addressAvatar, indexTitle) {
   var coordinatesLocation = [getRandomNumber(300, 901), getRandomNumber(100, 501)];
   return {
     'author': {
-      'avatar': 'img/avatars/user0' + addressAvatar + '.png'
+      'avatar': 'img/avatars/user0' + (addressAvatar + 1) + '.png'
     },
 
     'offer': {
@@ -71,7 +71,7 @@ var addObjects = function (numberOfObjects) {
   var Objects = [];
 
   for (var i = 0; i < numberOfObjects; i++) {
-    Objects.push(createOffer(i + 1, i));
+    Objects.push(createOffer(i, i));
   }
 
   return Objects;
