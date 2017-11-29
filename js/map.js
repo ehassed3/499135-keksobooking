@@ -78,19 +78,12 @@ map.classList.remove('map--faded');
 var mapListElement = map.querySelector('.map__pins');
 var template = document.querySelector('template').content;
 
-var mapPinElement = map.querySelector('.map__pin');
-mapPinElement.classList.remove('map__pin--main');
-
-var mapPinWidth = parseInt(getComputedStyle(mapPinElement).width, 0);
-var mapPinHeight = parseInt(getComputedStyle(mapPinElement).height, 0);
-
-mapPinElement.classList.add('map__pin--main');
-
 var renderMapPin = function (element) {
   var mapPin = template.querySelector('.map__pin').cloneNode(true);
+  var mapPinImage = mapPin.querySelector('img');
 
-  mapPin.style.left = element.location.x + (mapPinWidth / 2) + 'px';
-  mapPin.style.top = element.location.y + mapPinHeight + 'px';
+  mapPin.style.left = element.location.x + (mapPinImage.width / 2) + 'px';
+  mapPin.style.top = element.location.y + mapPinImage.height + 'px';
   mapPin.querySelector('img').setAttribute('src', element.author.avatar);
 
   return mapPin;
