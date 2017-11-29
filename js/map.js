@@ -32,15 +32,15 @@ var getRandomArray = function (arr) {
   return newArr;
 };
 
-var createOffer = function (addressAvatar, indexTitle) {
+var createOffer = function (indexOffer) {
   var coordinatesLocation = [getRandomNumber(300, 901), getRandomNumber(100, 501)];
   return {
     'author': {
-      'avatar': 'img/avatars/user0' + (addressAvatar + 1) + '.png'
+      'avatar': 'img/avatars/user0' + (indexOffer + 1) + '.png'
     },
 
     'offer': {
-      'title': TITLES[indexTitle],
+      'title': TITLES[indexOffer],
       'address': coordinatesLocation[0] + ', ' + coordinatesLocation[1],
       'price': getRandomNumber(1000, 1000001),
       'type': getRandomElement(OFFER_TYPES),
@@ -64,7 +64,7 @@ var addObjects = function (numberOfObjects) {
   var Objects = [];
 
   for (var i = 0; i < numberOfObjects; i++) {
-    Objects.push(createOffer(i, i));
+    Objects.push(createOffer(i));
   }
 
   return Objects;
@@ -78,11 +78,19 @@ map.classList.remove('map--faded');
 var mapListElement = map.querySelector('.map__pins');
 var template = document.querySelector('template').content;
 
+var mapPinElement = map.querySelector('.map__pin');
+mapPinElement.classList.remove('map__pin--main');
+
+var mapPinWidth = parseInt(getComputedStyle(mapPinElement).width, 0);
+var mapPinHeight = parseInt(getComputedStyle(mapPinElement).height, 0);
+
+mapPinElement.classList.add('map__pin--main');
+
 var renderMapPin = function (element) {
   var mapPin = template.querySelector('.map__pin').cloneNode(true);
 
-  mapPin.style.left = element.location.x + 20 + 'px';
-  mapPin.style.top = element.location.y + 44 + 'px';
+  mapPin.style.left = element.location.x + (mapPinWidth / 2) + 'px';
+  mapPin.style.top = element.location.y + mapPinHeight + 'px';
   mapPin.querySelector('img').setAttribute('src', element.author.avatar);
 
   return mapPin;
@@ -101,19 +109,9 @@ var renderMapCard = function (element) {
     }
   };
 
-  var features = mapCard.querySelectorAll('.feature');
-
-  var removeFeatures = function (arrFeatures) {
-    for (var i = 0; i < arrFeatures.length; i++) {
-      features[i].classList.remove('feature--' + arrFeatures[i]);
-      mapCard.querySelector('.popup__features').removeChild(features[i]);
-    }
-  };
-
-  var addFeatures = function (arrFeatures) {
-    for (var i = 0; i < arrFeatures.length; i++) {
-      mapCard.querySelector('.popup__features').appendChild(features[i]);
-      features[i].classList.add('feature--' + arrFeatures[i]);
+  var removeChilds = function (parent) {
+    while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
     }
   };
 
@@ -124,8 +122,18 @@ var renderMapCard = function (element) {
   mapCard.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + ' для ' + element.offer.guests + ' гостей';
   mapCard.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
 
-  removeFeatures(FEATURES);
-  addFeatures(element.offer.features);
+  var featuresList = mapCard.querySelector('.popup__features');
+  removeChilds(featuresList);
+
+  var fragmentFeatures = document.createDocumentFragment();
+
+  for (var i = 0; i < element.offer.features.length; i++) {
+    var featureElement = document.createElement('li');
+    featureElement.classList.add('feature', 'feature--' + element.offer.features[i]);
+    fragmentFeatures.appendChild(featureElement);
+  }
+
+  featuresList.appendChild(fragmentFeatures);
 
   mapCard.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
   mapCard.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
