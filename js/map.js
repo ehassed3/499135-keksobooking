@@ -74,7 +74,6 @@ var addObjects = function (numberOfObjects) {
 var listOfRentals = addObjects(NUMBER_OF_RENTALS);
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
 var mapListElement = map.querySelector('.map__pins');
 var template = document.querySelector('template').content;
@@ -135,12 +134,36 @@ var renderMapCard = function (element) {
   return mapCard;
 };
 
-var fragment = document.createDocumentFragment();
+var noticeForm = document.querySelector('.notice__form');
+var noticeFields = noticeForm.querySelectorAll('fieldset');
 
-for (var i = 0; i < listOfRentals.length; i++) {
-  fragment.appendChild(renderMapPin(listOfRentals[i]));
-}
+var disableFieldset = function (elementsForm, disabled) {
+  for (var i = 0; i < elementsForm.length; i++) {
+    if (disabled === true) {
+      elementsForm[i].disabled = true;
+    } else if (disabled === false) {
+      elementsForm[i].disabled = false;
+    }
+  }
+};
 
-fragment.appendChild(renderMapCard(listOfRentals[CARD_RENDER_NUMBER]));
+disableFieldset(noticeFields, true);
 
-mapListElement.appendChild(fragment);
+var mapPinMain = map.querySelector('.map__pin--main');
+
+var mapPinMainMouseUpHandler = function () {
+  map.classList.remove('map--faded');
+
+  var fragmentMapPins = document.createDocumentFragment();
+
+  for (var i = 0; i < listOfRentals.length; i++) {
+    fragmentMapPins.appendChild(renderMapPin(listOfRentals[i]));
+  }
+
+  mapListElement.appendChild(fragmentMapPins);
+
+  noticeForm.classList.remove('notice__form--disabled');
+  disableFieldset(noticeFields, false);
+};
+
+mapPinMain.addEventListener('mouseup', mapPinMainMouseUpHandler);
