@@ -89,9 +89,7 @@ var renderMapPin = function (element) {
   return mapPin;
 };
 
-var renderMapCard = function (element) {
-  var mapCard = template.querySelector('.map__card').cloneNode(true);
-
+var renderPopup = function (parent, element) {
   var getValueTypeOffer = function () {
     if (element.offer.type === 'flat') {
       return 'Квартира';
@@ -102,20 +100,20 @@ var renderMapCard = function (element) {
     }
   };
 
-  var removeChilds = function (parent) {
-    while (parent.firstChild) {
-      parent.removeChild(parent.firstChild);
+  var removeChilds = function (topElement) {
+    while (topElement.firstChild) {
+      topElement.removeChild(topElement.firstChild);
     }
   };
 
-  mapCard.querySelector('h3').textContent = element.offer.title;
-  mapCard.querySelector('small').textContent = element.offer.address;
-  mapCard.querySelector('.popup__price').innerHTML = element.offer.price + ' &#x20bd;/ночь';
-  mapCard.querySelector('h4').textContent = getValueTypeOffer();
-  mapCard.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + ' для ' + element.offer.guests + ' гостей';
-  mapCard.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
+  parent.querySelector('h3').textContent = element.offer.title;
+  parent.querySelector('small').textContent = element.offer.address;
+  parent.querySelector('.popup__price').innerHTML = element.offer.price + ' &#x20bd;/ночь';
+  parent.querySelector('h4').textContent = getValueTypeOffer();
+  parent.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + ' для ' + element.offer.guests + ' гостей';
+  parent.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
 
-  var featuresList = mapCard.querySelector('.popup__features');
+  var featuresList = parent.querySelector('.popup__features');
   removeChilds(featuresList);
 
   var fragmentFeatures = document.createDocumentFragment();
@@ -128,17 +126,33 @@ var renderMapCard = function (element) {
 
   featuresList.appendChild(fragmentFeatures);
 
-  mapCard.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
-  mapCard.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
+  parent.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
+  parent.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
+};
+
+var renderMapCard = function (element) {
+  var mapCard = template.querySelector('.map__card').cloneNode(true);
+
+  renderPopup(mapCard, element);
 
   return mapCard;
 };
+
+var fragment = document.createDocumentFragment();
+
+for (var i = 0; i < listOfRentals.length; i++) {
+  fragment.appendChild(renderMapPin(listOfRentals[i]));
+}
+
+fragment.appendChild(renderMapCard(listOfRentals[CARD_RENDER_NUMBER]));
+
+mapListElement.appendChild(fragment);
 
 var noticeForm = document.querySelector('.notice__form');
 var noticeFields = noticeForm.querySelectorAll('fieldset');
 
 var disableFieldset = function (elementsForm, disabled) {
-  for (var i = 0; i < elementsForm.length; i++) {
+  for (i = 0; i < elementsForm.length; i++) {
     if (disabled === true) {
       elementsForm[i].disabled = true;
     } else if (disabled === false) {
@@ -147,6 +161,14 @@ var disableFieldset = function (elementsForm, disabled) {
   }
 };
 
+var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+for (i = 0; i < mapPinsSide.length; i++) {
+  mapPinsSide[i].classList.add('hidden');
+}
+
+var popup = mapListElement.querySelector('.popup');
+popup.classList.add('hidden');
+
 disableFieldset(noticeFields, true);
 
 var mapPinMain = map.querySelector('.map__pin--main');
@@ -154,16 +176,54 @@ var mapPinMain = map.querySelector('.map__pin--main');
 var mapPinMainMouseUpHandler = function () {
   map.classList.remove('map--faded');
 
-  var fragmentMapPins = document.createDocumentFragment();
-
-  for (var i = 0; i < listOfRentals.length; i++) {
-    fragmentMapPins.appendChild(renderMapPin(listOfRentals[i]));
+  for (i = 0; i < mapPinsSide.length; i++) {
+    mapPinsSide[i].classList.remove('hidden');
   }
-
-  mapListElement.appendChild(fragmentMapPins);
 
   noticeForm.classList.remove('notice__form--disabled');
   disableFieldset(noticeFields, false);
 };
 
 mapPinMain.addEventListener('mouseup', mapPinMainMouseUpHandler);
+
+var replacePopup = function (target) {
+  for (i = 0; i < listOfRentals.length; i++) {
+    if (target.firstChild.getAttribute('src') === listOfRentals[i].author.avatar) {
+      renderPopup(popup, listOfRentals[i]);
+    }
+  }
+};
+
+var mapPinSideClickHandler = function (evt) {
+
+  var target = evt.target;
+
+  while (target !== mapListElement) {
+    if (target.className === 'map__pin') {
+      for (i = 0; i < mapPinsSide.length; i++) {
+        mapPinsSide[i].classList.remove('map__pin--active');
+      }
+
+      replacePopup(target);
+
+      target.classList.add('map__pin--active');
+      popup.classList.remove('hidden');
+      break;
+    }
+
+    target = target.parentNode;
+  }
+};
+
+mapListElement.addEventListener('click', mapPinSideClickHandler);
+
+var popupClose = popup.querySelector('.popup__close');
+
+var popupCloseClickHandler = function () {
+  popup.classList.add('hidden');
+  for (i = 0; i < mapPinsSide.length; i++) {
+    mapPinsSide[i].classList.remove('map__pin--active');
+  }
+};
+
+popupClose.addEventListener('click', popupCloseClickHandler);
