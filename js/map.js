@@ -87,6 +87,7 @@ var renderMapPin = function (element) {
   mapPin.style.left = element.location.x + 'px';
   mapPin.style.top = element.location.y - (mapPinImage.height / 2 + PIN_SPIRE_HEIGHT) + 'px';
   mapPin.querySelector('img').setAttribute('src', element.author.avatar);
+  mapPin.classList.add('hidden');
 
   return mapPin;
 };
@@ -140,15 +141,19 @@ var renderMapCard = function (element) {
   return mapCard;
 };
 
-var fragment = document.createDocumentFragment();
+var createMapElements = function (arrObjects) {
+  var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < listOfRentals.length; i++) {
-  fragment.appendChild(renderMapPin(listOfRentals[i]));
-}
+  for (var i = 0; i < arrObjects.length; i++) {
+    fragment.appendChild(renderMapPin(arrObjects[i]));
+  }
 
-fragment.appendChild(renderMapCard(listOfRentals[CARD_RENDER_NUMBER]));
+  fragment.appendChild(renderMapCard(arrObjects[CARD_RENDER_NUMBER]));
 
-mapListElement.appendChild(fragment);
+  mapListElement.appendChild(fragment);
+};
+
+createMapElements(listOfRentals);
 
 var popup = mapListElement.querySelector('.popup');
 var mapPinMain = map.querySelector('.map__pin--main');
@@ -158,7 +163,7 @@ var noticeForm = document.querySelector('.notice__form');
 var noticeFields = noticeForm.querySelectorAll('fieldset');
 
 var disableFieldset = function (elementsForm, disabled) {
-  for (i = 0; i < elementsForm.length; i++) {
+  for (var i = 0; i < elementsForm.length; i++) {
     if (disabled === true) {
       elementsForm[i].disabled = true;
     } else if (disabled === false) {
@@ -168,9 +173,6 @@ var disableFieldset = function (elementsForm, disabled) {
 };
 
 var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
-for (i = 0; i < mapPinsSide.length; i++) {
-  mapPinsSide[i].classList.add('hidden');
-}
 
 popup.classList.add('hidden');
 
@@ -179,7 +181,7 @@ disableFieldset(noticeFields, true);
 var openPage = function () {
   map.classList.remove('map--faded');
 
-  for (i = 0; i < mapPinsSide.length; i++) {
+  for (var i = 0; i < mapPinsSide.length; i++) {
     mapPinsSide[i].classList.remove('hidden');
   }
 
@@ -198,7 +200,7 @@ mapPinMain.addEventListener('keydown', function (evt) {
 });
 
 var replacePopup = function (target) {
-  for (i = 0; i < listOfRentals.length; i++) {
+  for (var i = 0; i < listOfRentals.length; i++) {
     if (target.firstChild.getAttribute('src') === listOfRentals[i].author.avatar) {
       renderPopup(popup, listOfRentals[i]);
     }
@@ -216,7 +218,7 @@ var openPopup = function (evt) {
 
   while (target !== mapListElement) {
     if (target.className === 'map__pin') {
-      for (i = 0; i < mapPinsSide.length; i++) {
+      for (var i = 0; i < mapPinsSide.length; i++) {
         mapPinsSide[i].classList.remove('map__pin--active');
       }
 
@@ -238,7 +240,7 @@ var popupClosingElement = popup.querySelector('.popup__close');
 
 var closePopup = function () {
   popup.classList.add('hidden');
-  for (i = 0; i < mapPinsSide.length; i++) {
+  for (var i = 0; i < mapPinsSide.length; i++) {
     mapPinsSide[i].classList.remove('map__pin--active');
   }
 };
