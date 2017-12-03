@@ -9,6 +9,7 @@ var NUMBER_OF_RENTALS = 8;
 var CARD_RENDER_NUMBER = 0;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var TAB_KEYCODE = 9;
 
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -264,3 +265,22 @@ popupClosingElement.addEventListener('keydown', function (evt) {
     closePopup(evt);
   }
 });
+
+var inputAddress = noticeForm.querySelector('#address');
+
+var checkValidationInputAddress = function () {
+  inputAddress.setAttribute('required', 'required');
+  inputAddress.addEventListener('keydown', function (evt) {
+    if (evt.keyCode !== TAB_KEYCODE) {
+      evt.preventDefault();
+    }
+  });
+  inputAddress.addEventListener('paste', function (evt) {
+    evt.preventDefault();
+  });
+  inputAddress.addEventListener('cut', function (evt) {
+    evt.preventDefault();
+  });
+};
+
+checkValidationInputAddress();
