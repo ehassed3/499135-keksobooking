@@ -329,3 +329,33 @@ var optionTimeOutChangeHandler = function () {
 
 selectTimeIn.addEventListener('change', optionTimeInChangeHandler);
 selectTimeOut.addEventListener('change', optionTimeOutChangeHandler);
+
+var selectType = noticeForm.querySelector('#type');
+var optionsType = selectType.querySelectorAll('option');
+
+var setMinValue = function () {
+  for (var i = 0; i < optionsType.length; i++) {
+    if (optionsType[i].selected === true) {
+      switch (optionsType[i].value) {
+        case 'bungalo':
+          inputPrice.min = 0;
+          break;
+        case 'flat':
+          inputPrice.min = 1000;
+          break;
+        case 'house':
+          inputPrice.min = 5000;
+          break;
+        case 'palace':
+          inputPrice.min = 10000;
+          break;
+      }
+    }
+  }
+};
+
+setMinValue();
+
+selectType.addEventListener('change', function () {
+  setMinValue();
+});
