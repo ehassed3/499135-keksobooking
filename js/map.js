@@ -284,3 +284,13 @@ var checkValidationInputAddress = function () {
 };
 
 checkValidationInputAddress();
+
+var inputTitle = noticeForm.querySelector('#title');
+
+var checkValidationInputTitle = function () {
+  inputTitle.setAttribute('required', 'required');
+  inputTitle.setAttribute('minlength', '30');
+  inputTitle.setAttribute('maxlength', '100');
+};
+
+checkValidationInputTitle();
