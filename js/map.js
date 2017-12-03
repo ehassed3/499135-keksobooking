@@ -405,3 +405,5 @@ setCapacity();
 selectRoomNumber.addEventListener('change', function () {
   setCapacity();
 });
+
+noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
