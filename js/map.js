@@ -359,3 +359,49 @@ setMinValue();
 selectType.addEventListener('change', function () {
   setMinValue();
 });
+
+var selectRoomNumber = noticeForm.querySelector('#room_number');
+var optionsRoomNumber = selectRoomNumber.querySelectorAll('option');
+var selectCapacity = noticeForm.querySelector('#capacity');
+var optionsCapacity = selectCapacity.querySelectorAll('option');
+
+var setCapacity = function () {
+  for (var i = 0; i < optionsCapacity.length; i++) {
+    optionsCapacity[i].disabled = false;
+  }
+
+  for (var j = 0; j < optionsRoomNumber.length; j++) {
+
+    if (optionsRoomNumber[j].selected === true) {
+      switch (optionsRoomNumber[j].value) {
+        case '1':
+          optionsCapacity[2].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[1].disabled = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '2':
+          optionsCapacity[1].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '3':
+          optionsCapacity[0].selected = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '100':
+          optionsCapacity[3].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[1].disabled = true;
+          optionsCapacity[2].disabled = true;
+          break;
+      }
+    }
+  }
+};
+
+setCapacity();
+
+selectRoomNumber.addEventListener('change', function () {
+  setCapacity();
+});
