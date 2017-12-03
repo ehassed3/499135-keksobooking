@@ -294,3 +294,14 @@ var checkValidationInputTitle = function () {
 };
 
 checkValidationInputTitle();
+
+var inputPrice = noticeForm.querySelector('#price');
+
+var checkValidationInputPrice = function () {
+  inputPrice.setAttribute('required', 'required');
+  inputPrice.setAttribute('value', '1000');
+  inputPrice.setAttribute('min', '0');
+  inputPrice.setAttribute('max', '1000000');
+};
+
+checkValidationInputPrice();
