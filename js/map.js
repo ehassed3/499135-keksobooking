@@ -190,8 +190,15 @@ var openPage = function () {
   disableFieldset(noticeFields, false);
 };
 
+var inputAddress = noticeForm.querySelector('#address');
+
+var getAddressGeneralPin = function () {
+  inputAddress.value = 'mock address';
+};
+
 mapPinMain.addEventListener('mouseup', function () {
   openPage();
+  getAddressGeneralPin();
 });
 
 mapPinMain.addEventListener('keydown', function (evt) {
@@ -265,8 +272,6 @@ popupClosingElement.addEventListener('keydown', function (evt) {
     closePopup(evt);
   }
 });
-
-var inputAddress = noticeForm.querySelector('#address');
 
 var checkValidationInputAddress = function () {
   inputAddress.setAttribute('required', 'required');
