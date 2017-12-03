@@ -305,3 +305,27 @@ var checkValidationInputPrice = function () {
 };
 
 checkValidationInputPrice();
+
+var selectTimeIn = noticeForm.querySelector('#timein');
+var optionsTimeIn = selectTimeIn.querySelectorAll('option');
+var selectTimeOut = noticeForm.querySelector('#timeout');
+var optionsTimeOut = selectTimeOut.querySelectorAll('option');
+
+var optionTimeInChangeHandler = function () {
+  for (var i = 0; i < optionsTimeIn.length; i++) {
+    if (optionsTimeIn[i].selected === true) {
+      optionsTimeOut[i].selected = true;
+    }
+  }
+};
+
+var optionTimeOutChangeHandler = function () {
+  for (var i = 0; i < optionsTimeOut.length; i++) {
+    if (optionsTimeOut[i].selected === true) {
+      optionsTimeIn[i].selected = true;
+    }
+  }
+};
+
+selectTimeIn.addEventListener('change', optionTimeInChangeHandler);
+selectTimeOut.addEventListener('change', optionTimeOutChangeHandler);
