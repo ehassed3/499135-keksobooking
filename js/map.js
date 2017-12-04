@@ -31,6 +31,20 @@
   var noticeForm = document.querySelector('.notice__form');
   var noticeFields = noticeForm.querySelectorAll('fieldset');
 
+  var replacePopup = function (target) {
+    for (var i = 0; i < window.data.listOfRentals.length; i++) {
+      if (target.firstChild.getAttribute('src') === window.data.listOfRentals[i].author.avatar) {
+        window.card.renderPopup(popup, window.data.listOfRentals[i]);
+      }
+    }
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      window.map.closePopup(evt);
+    }
+  };
+
   window.map = {
     openPage: function () {
       map.classList.remove('map--faded');
@@ -49,20 +63,6 @@
       inputAddress.value = 'mock address';
     },
 
-    replacePopup: function (target) {
-      for (var i = 0; i < window.data.listOfRentals.length; i++) {
-        if (target.firstChild.getAttribute('src') === window.data.listOfRentals[i].author.avatar) {
-          window.card.renderPopup(popup, window.data.listOfRentals[i]);
-        }
-      }
-    },
-
-    onPopupEscPress: function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        window.map.closePopup(evt);
-      }
-    },
-
     openPopup: function (evt) {
       var target = evt.target;
 
@@ -75,9 +75,9 @@
           target.classList.add('map__pin--active');
           popup.classList.remove('hidden');
 
-          window.map.replacePopup(target);
+          replacePopup(target);
 
-          document.addEventListener('keydown', window.map.onPopupEscPress);
+          document.addEventListener('keydown', onPopupEscPress);
 
           break;
         }
