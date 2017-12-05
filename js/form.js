@@ -9,11 +9,7 @@
   window.form = {
     disableFieldset: function (elementsForm, disabled) {
       for (var i = 0; i < elementsForm.length; i++) {
-        if (disabled === true) {
-          elementsForm[i].disabled = true;
-        } else if (disabled === false) {
-          elementsForm[i].disabled = false;
-        }
+        elementsForm[i].disabled = disabled;
       }
     }
   };
