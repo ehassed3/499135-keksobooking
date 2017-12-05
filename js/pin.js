@@ -29,7 +29,6 @@
 
   mapPinMain.addEventListener('mouseup', function () {
     window.map.openPage();
-    window.map.getAddressGeneralPin();
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {

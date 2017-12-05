@@ -4,6 +4,7 @@
   var CARD_RENDER_NUMBER = 0;
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var PIN_MAIN_SPIRE_HEIGHT = 22;
 
   var map = document.querySelector('.map');
   var mapListElement = map.querySelector('.map__pins');
@@ -57,12 +58,6 @@
       window.form.disableFieldset(noticeFields, false);
     },
 
-    getAddressGeneralPin: function () {
-      var inputAddress = noticeForm.querySelector('#address');
-
-      inputAddress.value = 'mock address';
-    },
-
     openPopup: function (evt) {
       var target = evt.target;
 
@@ -105,4 +100,40 @@
       }
     }
   };
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var pinMainImage = mapPinMain.querySelector('img');
+
+      var coordinate = {
+        x: moveEvt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0),
+        y: moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)
+      };
+
+      mapPinMain.style.top = coordinate.y + 'px';
+      mapPinMain.style.left = coordinate.x + 'px';
+
+      if (coordinate.y < 100) {
+        mapPinMain.style.top = '100px';
+      } else if (coordinate.y > 500) {
+        mapPinMain.style.top = '500px';
+      }
+
+      var inputAddress = noticeForm.querySelector('#address');
+      inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + mapPinMain.style.top;
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
