@@ -40,7 +40,7 @@
     }
   };
 
-  var onPopupEscPress = function (evt) {
+  var popupEscPressHandler = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       window.map.closePopup(evt);
     }
@@ -72,7 +72,7 @@
 
           replacePopup(target);
 
-          document.addEventListener('keydown', onPopupEscPress);
+          document.addEventListener('keydown', popupEscPressHandler);
 
           break;
         }
@@ -103,14 +103,19 @@
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
+    var pinMainImage = mapPinMain.querySelector('img');
 
-    var onMouseMove = function (moveEvt) {
+    var shift = {
+      x: evt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0) - mapPinMain.offsetLeft,
+      y: evt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT) - mapPinMain.offsetTop
+    };
+
+    var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
-      var pinMainImage = mapPinMain.querySelector('img');
 
       var coordinate = {
-        x: moveEvt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0),
-        y: moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)
+        x: (moveEvt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0)) - shift.x,
+        y: (moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) - shift.y
       };
 
       mapPinMain.style.top = coordinate.y + 'px';
@@ -126,14 +131,14 @@
       inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + mapPinMain.style.top;
     };
 
-    var onMouseUp = function (upEvt) {
+    var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
   });
 })();
