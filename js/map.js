@@ -106,7 +106,7 @@
     var pinMainImage = mapPinMain.querySelector('img');
 
     var shift = {
-      x: evt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0) - mapPinMain.offsetLeft,
+      x: evt.clientX - mapPinMain.offsetLeft,
       y: evt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT) - mapPinMain.offsetTop
     };
 
@@ -114,12 +114,12 @@
       moveEvt.preventDefault();
 
       var coordinate = {
-        x: (moveEvt.clientX - parseInt(getComputedStyle(document.body).marginLeft, 0)) - shift.x,
+        x: moveEvt.clientX - shift.x,
         y: (moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) - shift.y
       };
 
-      mapPinMain.style.top = coordinate.y + 'px';
       mapPinMain.style.left = coordinate.x + 'px';
+      mapPinMain.style.top = coordinate.y + 'px';
 
       if (coordinate.y < 100) {
         mapPinMain.style.top = '100px';
