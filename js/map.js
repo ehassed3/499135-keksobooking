@@ -4,6 +4,7 @@
   var CARD_RENDER_NUMBER = 0;
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var PIN_MAIN_SPIRE_HEIGHT = 22;
 
   var map = document.querySelector('.map');
   var mapListElement = map.querySelector('.map__pins');
@@ -39,7 +40,7 @@
     }
   };
 
-  var onPopupEscPress = function (evt) {
+  var popupEscPressHandler = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       window.map.closePopup(evt);
     }
@@ -57,12 +58,6 @@
       window.form.disableFieldset(noticeFields, false);
     },
 
-    getAddressGeneralPin: function () {
-      var inputAddress = noticeForm.querySelector('#address');
-
-      inputAddress.value = 'mock address';
-    },
-
     openPopup: function (evt) {
       var target = evt.target;
 
@@ -77,7 +72,7 @@
 
           replacePopup(target);
 
-          document.addEventListener('keydown', onPopupEscPress);
+          document.addEventListener('keydown', popupEscPressHandler);
 
           break;
         }
@@ -105,4 +100,45 @@
       }
     }
   };
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var pinMainImage = mapPinMain.querySelector('img');
+
+    var shift = {
+      x: evt.clientX - mapPinMain.offsetLeft,
+      y: evt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT) - mapPinMain.offsetTop
+    };
+
+    var mouseMoveHandler = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var coordinate = {
+        x: moveEvt.clientX - shift.x,
+        y: (moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) - shift.y
+      };
+
+      mapPinMain.style.left = coordinate.x + 'px';
+      mapPinMain.style.top = coordinate.y + 'px';
+
+      if (coordinate.y < 100) {
+        mapPinMain.style.top = '100px';
+      } else if (coordinate.y > 500) {
+        mapPinMain.style.top = '500px';
+      }
+
+      var inputAddress = noticeForm.querySelector('#address');
+      inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + mapPinMain.style.top;
+    };
+
+    var mouseUpHandler = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  });
 })();
