@@ -40,12 +40,12 @@
   var mapListElement = map.querySelector('.map__pins');
 
   mapListElement.addEventListener('click', function (evt) {
-    window.map.openPopup(evt);
+    window.showCard(evt);
   });
 
   mapListElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      window.map.openPopup(evt);
+      window.showCard(evt);
     }
   });
 })();
