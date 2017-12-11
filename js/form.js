@@ -59,45 +59,29 @@
   var selectTimeIn = noticeForm.querySelector('#timein');
   var selectTimeOut = noticeForm.querySelector('#timeout');
 
-  var selectTimeInChangeHandler = function () {
-    selectTimeOut.selectedIndex = selectTimeIn.selectedIndex;
+  var syncValues = function (element, value) {
+    element.value = value;
   };
 
-  var selectTimeOutChangeHandler = function () {
-    selectTimeIn.selectedIndex = selectTimeOut.selectedIndex;
-  };
+  selectTimeIn.addEventListener('change', function () {
+    window.synchronizeFields(selectTimeIn, selectTimeOut, ['12:00', '13:00', '14:00'], ['12:00', '13:00', '14:00'], syncValues);
+  });
 
-  selectTimeIn.addEventListener('change', selectTimeInChangeHandler);
-  selectTimeOut.addEventListener('change', selectTimeOutChangeHandler);
+  selectTimeOut.addEventListener('change', function () {
+    window.synchronizeFields(selectTimeOut, selectTimeIn, ['12:00', '13:00', '14:00'], ['12:00', '13:00', '14:00'], syncValues);
+  });
+
 
   var selectType = noticeForm.querySelector('#type');
-  var optionsType = selectType.querySelectorAll('option');
 
-  var setMinValue = function () {
-    for (var i = 0; i < optionsType.length; i++) {
-      if (optionsType[i].selected === true) {
-        switch (optionsType[i].value) {
-          case 'bungalo':
-            inputPrice.min = 0;
-            break;
-          case 'flat':
-            inputPrice.min = 1000;
-            break;
-          case 'house':
-            inputPrice.min = 5000;
-            break;
-          case 'palace':
-            inputPrice.min = 10000;
-            break;
-        }
-      }
-    }
+  var syncValueWithMin = function (element, value) {
+    element.min = value;
   };
 
-  setMinValue();
+  window.synchronizeFields(selectType, inputPrice, ['flat', 'bungalo', 'house', 'palace'], [1000, 0, 5000, 10000], syncValueWithMin);
 
   selectType.addEventListener('change', function () {
-    setMinValue();
+    window.synchronizeFields(selectType, inputPrice, ['flat', 'bungalo', 'house', 'palace'], [1000, 0, 5000, 10000], syncValueWithMin);
   });
 
   var selectRoomNumber = noticeForm.querySelector('#room_number');
