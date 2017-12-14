@@ -56,7 +56,7 @@
 
     var shift = {
       x: evt.clientX - mapPinMain.offsetLeft,
-      y: evt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT) - mapPinMain.offsetTop
+      y: evt.clientY - mapPinMain.offsetTop
     };
 
     var mouseMoveHandler = function (moveEvt) {
@@ -64,20 +64,14 @@
 
       var coordinate = {
         x: moveEvt.clientX - shift.x,
-        y: (moveEvt.clientY - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) - shift.y
+        y: moveEvt.clientY - shift.y
       };
 
       mapPinMain.style.left = coordinate.x + 'px';
       mapPinMain.style.top = coordinate.y + 'px';
 
-      if (coordinate.y < 100) {
-        mapPinMain.style.top = '100px';
-      } else if (coordinate.y > 500) {
-        mapPinMain.style.top = '500px';
-      }
-
       var inputAddress = noticeForm.querySelector('#address');
-      inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + mapPinMain.style.top;
+      inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + (parseInt(mapPinMain.style.top, 0) + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
     };
 
     var mouseUpHandler = function (upEvt) {
