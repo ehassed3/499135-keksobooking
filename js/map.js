@@ -10,31 +10,44 @@
   var noticeForm = document.querySelector('.notice__form');
   var noticeFields = noticeForm.querySelectorAll('fieldset');
 
-  var openPage = function () {
-    var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var succesHandler = function (listOfRentals) {
     map.classList.remove('map--faded');
+    var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < mapPinsSide.length; i++) {
-      mapPinsSide[i].classList.remove('hidden');
+    for (var i = 0; i < listOfRentals.length; i++) {
+      fragment.appendChild(window.pin.renderMapPin(listOfRentals[i]));
     }
+
+    mapListElement.appendChild(fragment);
 
     noticeForm.classList.remove('notice__form--disabled');
     window.form.disableFieldset(noticeFields, false);
+    window.pin.pressPinSide();
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'position: absolute; width: 100%; z-index: 100; font-size: 50px; text-align: center; color: red;';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   };
 
   mapPinMain.addEventListener('mouseup', function () {
-    openPage();
+    window.backend.load(succesHandler, errorHandler);
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      openPage();
+      window.backend.load(succesHandler, errorHandler);
     }
   });
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
+    var inputAddress = noticeForm.querySelector('#address');
     var pinMainImage = mapPinMain.querySelector('img');
+
+    inputAddress.value = 'x: ' + mapPinMain.offsetLeft + ', y: ' + (mapPinMain.offsetTop + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
 
     var shift = {
       x: evt.clientX - mapPinMain.offsetLeft,
@@ -52,8 +65,7 @@
       mapPinMain.style.left = coordinate.x + 'px';
       mapPinMain.style.top = coordinate.y + 'px';
 
-      var inputAddress = noticeForm.querySelector('#address');
-      inputAddress.value = 'x: ' + mapPinMain.style.left + ', y: ' + (parseInt(mapPinMain.style.top, 0) + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+      inputAddress.value = 'x: ' + parseInt(mapPinMain.style.left, 0) + ', y: ' + (parseInt(mapPinMain.style.top, 0) + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
     };
 
     var mouseUpHandler = function (upEvt) {

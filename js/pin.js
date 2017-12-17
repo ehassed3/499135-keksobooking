@@ -10,7 +10,6 @@
     parent.style.left = element.location.x + 'px';
     parent.style.top = element.location.y - (pinImage.height / 2 + PIN_SPIRE_HEIGHT) + 'px';
     pinImage.setAttribute('src', element.author.avatar);
-    parent.classList.add('hidden');
   };
 
   window.pin = {
@@ -21,19 +20,24 @@
       renderPin(mapPin, element);
 
       return mapPin;
+    },
+
+    pressPinSide: function () {
+      var map = document.querySelector('.map');
+      var mapListElement = map.querySelector('.map__pins');
+      var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+      for (var i = 0; i < mapPinsSide.length; i++) {
+        mapPinsSide[i].addEventListener('click', function (evt) {
+          window.showCard(evt);
+        });
+
+        mapPinsSide[i].addEventListener('keydown', function (evt) {
+          if (evt.keyCode === ENTER_KEYCODE) {
+            window.showCard(evt);
+          }
+        });
+      }
     }
   };
-
-  var map = document.querySelector('.map');
-  var mapListElement = map.querySelector('.map__pins');
-
-  mapListElement.addEventListener('click', function (evt) {
-    window.showCard(evt);
-  });
-
-  mapListElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      window.showCard(evt);
-    }
-  });
 })();
