@@ -10,7 +10,7 @@
   var noticeForm = document.querySelector('.notice__form');
   var noticeFields = noticeForm.querySelectorAll('fieldset');
 
-  var succesHandler = function (listOfRentals) {
+  var renderMap = function (listOfRentals) {
     map.classList.remove('map--faded');
     var fragment = document.createDocumentFragment();
 
@@ -33,12 +33,18 @@
   };
 
   mapPinMain.addEventListener('mouseup', function () {
-    window.backend.load(succesHandler, errorHandler);
+    window.backend.load(function (data) {
+      window.data(data);
+      renderMap(window.data.value);
+    }, errorHandler);
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      window.backend.load(succesHandler, errorHandler);
+      window.backend.load(function (data) {
+        window.data(data);
+        renderMap(window.data.value);
+      }, errorHandler);
     }
   });
 
@@ -61,6 +67,12 @@
         x: moveEvt.clientX - shift.x,
         y: moveEvt.clientY - shift.y
       };
+
+      if (coordinate.y < 100) {
+        coordinate.y = 100;
+      } else if (coordinate.y > 500) {
+        coordinate.y = 500;
+      }
 
       mapPinMain.style.left = coordinate.x + 'px';
       mapPinMain.style.top = coordinate.y + 'px';

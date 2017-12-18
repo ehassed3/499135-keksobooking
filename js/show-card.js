@@ -10,13 +10,13 @@
   var mapPinMain = map.querySelector('.map__pin--main');
 
   var replacePopup = function (target) {
-    for (var i = 0; i < window.data.length; i++) {
+    for (var i = 0; i < window.data.value.length; i++) {
       var x = parseInt(target.style.left, 0);
       var y = parseInt(target.style.top, 0) + PIN_HEIGHT;
-      if (x === window.data[i].location.x && y === window.data[i].location.y) {
+      if (x === window.data.value[i].location.x && y === window.data.value[i].location.y) {
         var fragment = document.createDocumentFragment();
 
-        fragment.appendChild(window.card.renderMapCard(window.data[i]));
+        fragment.appendChild(window.card.renderMapCard(window.data.value[i]));
 
         mapListElement.appendChild(fragment);
 
