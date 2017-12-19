@@ -27,26 +27,30 @@
 
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
-    node.style = 'position: absolute; width: 100%; z-index: 100; font-size: 50px; text-align: center; color: red;';
+    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; width: 1200px;';
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  mapPinMain.addEventListener('mouseup', function () {
-    window.backend.load(function (data) {
-      window.data(data);
-      renderMap(window.data.value);
-    }, errorHandler);
-  });
+  window.backend.load(function (data) {
+    window.data(data);
 
-  mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      window.backend.load(function (data) {
-        window.data(data);
+    var pinMouseUpHandler = function () {
+      renderMap(window.data.value);
+      mapPinMain.removeEventListener('mouseup', pinMouseUpHandler);
+    };
+
+    mapPinMain.addEventListener('mouseup', pinMouseUpHandler);
+
+    var pinKeyDownHandler = function (evt) {
+      if (evt.keyCode === ENTER_KEYCODE) {
         renderMap(window.data.value);
-      }, errorHandler);
-    }
-  });
+        mapPinMain.removeEventListener('keydown', pinKeyDownHandler);
+      }
+    };
+
+    mapPinMain.addEventListener('keydown', pinKeyDownHandler);
+  }, errorHandler);
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();

@@ -137,7 +137,7 @@
 
     var errorHandler = function (errorMessage) {
       var node = document.createElement('div');
-      node.style = 'position: absolute; width: 100%; z-index: 100; font-size: 50px; text-align: center; color: red;';
+      node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; width: 1200px;';
       node.textContent = errorMessage;
       document.body.insertAdjacentElement('afterbegin', node);
     };
