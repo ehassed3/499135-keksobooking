@@ -49,7 +49,7 @@
 
     filters.addEventListener('change', function () {
       var getFilter = function () {
-        window.filter(window.data.value)
+        window.filter(window.data.value);
       };
 
       window.debounce(getFilter);
