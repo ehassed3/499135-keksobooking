@@ -21,7 +21,7 @@
 
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
-    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; width: 1200px;';
+    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; left: 0; right: 0;';
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
@@ -48,7 +48,11 @@
     var filters = document.querySelector('.map__filters');
 
     filters.addEventListener('change', function () {
-      window.debounce(window.filter(window.data.value));
+      var getFilter = function () {
+        window.filter(window.data.value)
+      };
+
+      window.debounce(getFilter);
     });
   }, errorHandler);
 
