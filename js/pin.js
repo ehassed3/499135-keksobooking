@@ -4,6 +4,9 @@
   var PIN_SPIRE_HEIGHT = 18;
   var ENTER_KEYCODE = 13;
 
+  var map = document.querySelector('.map');
+  var mapListElement = map.querySelector('.map__pins');
+
   var renderPin = function (parent, element) {
     var pinImage = parent.querySelector('img');
 
@@ -22,9 +25,24 @@
       return mapPin;
     },
 
+    addMapPin: function (listOfRentals, numberPins) {
+      var fragment = document.createDocumentFragment();
+
+      for (var i = 0; i < numberPins; i++) {
+        fragment.appendChild(window.pin.renderMapPin(listOfRentals[i]));
+      }
+
+      mapListElement.appendChild(fragment);
+    },
+
+    removeMapPin: function () {
+      var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+      for (var i = 0; i < mapPinsSide.length; i++) {
+        mapListElement.removeChild(mapPinsSide[i]);
+      }
+    },
+
     pressPinSide: function () {
-      var map = document.querySelector('.map');
-      var mapListElement = map.querySelector('.map__pins');
       var mapPinsSide = mapListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
 
       for (var i = 0; i < mapPinsSide.length; i++) {

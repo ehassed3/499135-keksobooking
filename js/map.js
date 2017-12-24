@@ -3,22 +3,16 @@
 (function () {
   var PIN_MAIN_SPIRE_HEIGHT = 22;
   var ENTER_KEYCODE = 13;
+  var NUMBER_PINS = 5;
 
   var map = document.querySelector('.map');
-  var mapListElement = map.querySelector('.map__pins');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
   var noticeFields = noticeForm.querySelectorAll('fieldset');
 
   var renderMap = function (listOfRentals) {
     map.classList.remove('map--faded');
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < listOfRentals.length; i++) {
-      fragment.appendChild(window.pin.renderMapPin(listOfRentals[i]));
-    }
-
-    mapListElement.appendChild(fragment);
+    window.pin.addMapPin(listOfRentals, NUMBER_PINS);
 
     noticeForm.classList.remove('notice__form--disabled');
     window.form.disableFieldset(noticeFields, false);
@@ -27,7 +21,7 @@
 
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
-    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; width: 1200px;';
+    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; left: 0; right: 0;';
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
@@ -50,6 +44,16 @@
     };
 
     mapPinMain.addEventListener('keydown', pinKeyDownHandler);
+
+    var filters = document.querySelector('.map__filters');
+
+    filters.addEventListener('change', function () {
+      var getFilter = function () {
+        window.filter(window.data.value);
+      };
+
+      window.debounce(getFilter);
+    });
   }, errorHandler);
 
   mapPinMain.addEventListener('mousedown', function (evt) {
