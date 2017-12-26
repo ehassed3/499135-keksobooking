@@ -62,8 +62,8 @@
   var selectTimeIn = noticeForm.querySelector('#timein');
   var selectTimeOut = noticeForm.querySelector('#timeout');
 
-  var syncValues = function (element, value) {
-    element.value = value;
+  var syncValues = function (index, element, value) {
+    element.value = value[index];
   };
 
   selectTimeIn.addEventListener('change', function () {
@@ -77,8 +77,8 @@
 
   var selectType = noticeForm.querySelector('#type');
 
-  var syncValueWithMin = function (element, value) {
-    element.min = value;
+  var syncValueWithMin = function (index, element, value) {
+    element.min = value[index];
   };
 
   window.synchronizeFields(selectType, inputPrice, VALUES_SELECT_TYPE, MIN_INPUT_PRICE, syncValueWithMin);
@@ -98,7 +98,7 @@
     });
 
     Array.from(optionsRoomNumber).forEach(function (option) {
-      if (option.selected === true) {
+      if (option.selected) {
         switch (option.value) {
           case '1':
             optionsCapacity[2].selected = true;

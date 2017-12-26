@@ -36,6 +36,22 @@
 
     featuresList.appendChild(fragmentFeatures);
 
+    var photosList = parent.querySelector('.popup__pictures');
+    removeChilds(photosList);
+
+    var fragmentPhotos = document.createDocumentFragment();
+
+    element.offer.photos.forEach(function (source) {
+      var photosElement = document.createElement('li');
+      var photo = document.createElement('img');
+      photo.src = source;
+      photo.style = 'width: 40px; height: 40px;';
+      photosElement.appendChild(photo);
+      fragmentPhotos.appendChild(photosElement);
+    });
+
+    photosList.appendChild(fragmentPhotos);
+
     parent.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
     parent.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
   };
