@@ -2,15 +2,18 @@
 
 (function () {
   var TAB_KEYCODE = 9;
+  var VALUES_SELECT_TIME = ['12:00', '13:00', '14:00'];
+  var VALUES_SELECT_TYPE = ['flat', 'bungalo', 'house', 'palace'];
+  var MIN_INPUT_PRICE = [1000, 0, 5000, 10000];
 
   var noticeForm = document.querySelector('.notice__form');
   var noticeFields = noticeForm.querySelectorAll('fieldset');
 
   window.form = {
     disableFieldset: function (elementsForm, disabled) {
-      for (var i = 0; i < elementsForm.length; i++) {
-        elementsForm[i].disabled = disabled;
-      }
+      Array.from(elementsForm).forEach(function (element) {
+        element.disabled = disabled;
+      });
     }
   };
 
@@ -64,11 +67,11 @@
   };
 
   selectTimeIn.addEventListener('change', function () {
-    window.synchronizeFields(selectTimeIn, selectTimeOut, ['12:00', '13:00', '14:00'], ['12:00', '13:00', '14:00'], syncValues);
+    window.synchronizeFields(selectTimeIn, selectTimeOut, VALUES_SELECT_TIME, VALUES_SELECT_TIME, syncValues);
   });
 
   selectTimeOut.addEventListener('change', function () {
-    window.synchronizeFields(selectTimeOut, selectTimeIn, ['12:00', '13:00', '14:00'], ['12:00', '13:00', '14:00'], syncValues);
+    window.synchronizeFields(selectTimeOut, selectTimeIn, VALUES_SELECT_TIME, VALUES_SELECT_TIME, syncValues);
   });
 
 
@@ -78,10 +81,10 @@
     element.min = value;
   };
 
-  window.synchronizeFields(selectType, inputPrice, ['flat', 'bungalo', 'house', 'palace'], [1000, 0, 5000, 10000], syncValueWithMin);
+  window.synchronizeFields(selectType, inputPrice, VALUES_SELECT_TYPE, MIN_INPUT_PRICE, syncValueWithMin);
 
   selectType.addEventListener('change', function () {
-    window.synchronizeFields(selectType, inputPrice, ['flat', 'bungalo', 'house', 'palace'], [1000, 0, 5000, 10000], syncValueWithMin);
+    window.synchronizeFields(selectType, inputPrice, VALUES_SELECT_TYPE, MIN_INPUT_PRICE, syncValueWithMin);
   });
 
   var selectRoomNumber = noticeForm.querySelector('#room_number');
@@ -90,14 +93,13 @@
   var optionsCapacity = selectCapacity.querySelectorAll('option');
 
   var setCapacity = function () {
-    for (var i = 0; i < optionsCapacity.length; i++) {
-      optionsCapacity[i].disabled = false;
-    }
+    Array.from(optionsCapacity).forEach(function (option) {
+      option.disabled = false;
+    });
 
-    for (var j = 0; j < optionsRoomNumber.length; j++) {
-
-      if (optionsRoomNumber[j].selected === true) {
-        switch (optionsRoomNumber[j].value) {
+    Array.from(optionsRoomNumber).forEach(function (option) {
+      if (option.selected === true) {
+        switch (option.value) {
           case '1':
             optionsCapacity[2].selected = true;
             optionsCapacity[0].disabled = true;
@@ -121,7 +123,7 @@
             break;
         }
       }
-    }
+    });
   };
 
   setCapacity();

@@ -64,10 +64,10 @@
   window.filter = function (data) {
     var filteredData = getFilteredData(data);
 
-    window.pin.removeMapPin();
+    window.pin.remove();
 
     filteredData.length = Math.min(filteredData.length, NUMBER_PINS);
-    window.pin.addMapPin(filteredData, filteredData.length);
+    window.pin.add(filteredData, filteredData.length);
 
     window.pin.pressPinSide();
   };

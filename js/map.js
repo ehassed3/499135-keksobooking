@@ -12,7 +12,7 @@
 
   var renderMap = function (listOfRentals) {
     map.classList.remove('map--faded');
-    window.pin.addMapPin(listOfRentals, NUMBER_PINS);
+    window.pin.add(listOfRentals, NUMBER_PINS);
 
     noticeForm.classList.remove('notice__form--disabled');
     window.form.disableFieldset(noticeFields, false);

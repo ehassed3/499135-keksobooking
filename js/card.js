@@ -1,55 +1,51 @@
 'use strict';
 
 (function () {
-  window.card = {
-    renderPopup: function (parent, element) {
-      var getValueTypeOffer = function () {
-        if (element.offer.type === 'flat') {
-          return 'Квартира';
-        } else if (element.offer.type === 'bungalo') {
-          return 'Бунгало';
-        } else {
-          return 'Дом';
-        }
-      };
+  var addElementsPopup = function (parent, element) {
+    var typesOffer = {
+      'flat': 'Квартира',
 
-      var removeChilds = function (topElement) {
-        while (topElement.firstChild) {
-          topElement.removeChild(topElement.firstChild);
-        }
-      };
+      'bungalo': 'Бунгало',
 
-      parent.querySelector('h3').textContent = element.offer.title;
-      parent.querySelector('small').textContent = element.offer.address;
-      parent.querySelector('.popup__price').innerHTML = element.offer.price + ' &#x20bd;/ночь';
-      parent.querySelector('h4').textContent = getValueTypeOffer();
-      parent.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + ' для ' + element.offer.guests + ' гостей';
-      parent.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
+      'house': 'Дом'
+    };
 
-      var featuresList = parent.querySelector('.popup__features');
-      removeChilds(featuresList);
-
-      var fragmentFeatures = document.createDocumentFragment();
-
-      for (var i = 0; i < element.offer.features.length; i++) {
-        var featureElement = document.createElement('li');
-        featureElement.classList.add('feature', 'feature--' + element.offer.features[i]);
-        fragmentFeatures.appendChild(featureElement);
+    var removeChilds = function (topElement) {
+      while (topElement.firstChild) {
+        topElement.removeChild(topElement.firstChild);
       }
+    };
 
-      featuresList.appendChild(fragmentFeatures);
+    parent.querySelector('h3').textContent = element.offer.title;
+    parent.querySelector('small').textContent = element.offer.address;
+    parent.querySelector('.popup__price').innerHTML = element.offer.price + ' &#x20bd;/ночь';
+    parent.querySelector('h4').textContent = typesOffer[element.offer.type];
+    parent.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + ' для ' + element.offer.guests + ' гостей';
+    parent.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
 
-      parent.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
-      parent.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
-    },
+    var featuresList = parent.querySelector('.popup__features');
+    removeChilds(featuresList);
 
-    renderMapCard: function (element) {
-      var template = document.querySelector('template').content;
-      var mapCard = template.querySelector('.map__card').cloneNode(true);
+    var fragmentFeatures = document.createDocumentFragment();
 
-      window.card.renderPopup(mapCard, element);
+    element.offer.features.forEach(function (feature) {
+      var featureElement = document.createElement('li');
+      featureElement.classList.add('feature', 'feature--' + feature);
+      fragmentFeatures.appendChild(featureElement);
+    });
 
-      return mapCard;
-    }
+    featuresList.appendChild(fragmentFeatures);
+
+    parent.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
+    parent.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
+  };
+
+  window.card = function (element) {
+    var template = document.querySelector('template').content;
+    var mapCard = template.querySelector('.map__card').cloneNode(true);
+
+    addElementsPopup(mapCard, element);
+
+    return mapCard;
   };
 })();
