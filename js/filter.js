@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var NUMBER_PINS = 5;
   var PRICE_MIDDLE_MIN = 10000;
   var PRICE_MIDDLE_MAX = 50000;
 
@@ -65,9 +64,7 @@
     var filteredData = getFilteredData(data);
 
     window.pin.remove();
-
-    filteredData.length = Math.min(filteredData.length, NUMBER_PINS);
-    window.pin.add(filteredData, filteredData.length);
+    window.pin.add(filteredData);
 
     window.pin.pressPinSide();
   };

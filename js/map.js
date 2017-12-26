@@ -3,7 +3,6 @@
 (function () {
   var PIN_MAIN_SPIRE_HEIGHT = 22;
   var ENTER_KEYCODE = 13;
-  var NUMBER_PINS = 5;
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
@@ -12,7 +11,7 @@
 
   var renderMap = function (listOfRentals) {
     map.classList.remove('map--faded');
-    window.pin.add(listOfRentals, NUMBER_PINS);
+    window.pin.add(listOfRentals);
 
     noticeForm.classList.remove('notice__form--disabled');
     window.form.disableFieldset(noticeFields, false);

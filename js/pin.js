@@ -20,8 +20,9 @@
   };
 
   window.pin = {
-    add: function (listOfRentals, numberPins) {
+    add: function (listOfRentals) {
       var fragment = document.createDocumentFragment();
+      var numberPins = (listOfRentals.length > 5) ? 5 : listOfRentals.length;
 
       for (var i = 0; i < numberPins; i++) {
         fragment.appendChild(renderPin(listOfRentals[i]));
