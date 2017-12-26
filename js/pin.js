@@ -3,6 +3,7 @@
 (function () {
   var PIN_SPIRE_HEIGHT = 18;
   var ENTER_KEYCODE = 13;
+  var NUMBER_PINS = 5;
 
   var map = document.querySelector('.map');
   var mapListElement = map.querySelector('.map__pins');
@@ -22,7 +23,7 @@
   window.pin = {
     add: function (listOfRentals) {
       var fragment = document.createDocumentFragment();
-      var numberPins = (listOfRentals.length > 5) ? 5 : listOfRentals.length;
+      var numberPins = (listOfRentals.length > NUMBER_PINS) ? NUMBER_PINS : listOfRentals.length;
 
       for (var i = 0; i < numberPins; i++) {
         fragment.appendChild(renderPin(listOfRentals[i]));
