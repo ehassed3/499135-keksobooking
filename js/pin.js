@@ -15,7 +15,7 @@
 
     mapPin.style.left = element.location.x + 'px';
     mapPin.style.top = element.location.y - (pinImage.height / 2 + PIN_SPIRE_HEIGHT) + 'px';
-    pinImage.setAttribute('src', element.author.avatar);
+    pinImage.src = element.author.avatar;
 
     return mapPin;
   };

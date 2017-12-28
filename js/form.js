@@ -22,7 +22,7 @@
   var inputAddress = noticeForm.querySelector('#address');
 
   var checkValidationInputAddress = function () {
-    inputAddress.setAttribute('required', 'required');
+    inputAddress.required = 'required';
     inputAddress.addEventListener('keydown', function (evt) {
       if (evt.keyCode !== TAB_KEYCODE) {
         evt.preventDefault();
@@ -41,9 +41,9 @@
   var inputTitle = noticeForm.querySelector('#title');
 
   var checkValidationInputTitle = function () {
-    inputTitle.setAttribute('required', 'required');
-    inputTitle.setAttribute('minlength', '30');
-    inputTitle.setAttribute('maxlength', '100');
+    inputTitle.required = 'required';
+    inputTitle.minLength = '30';
+    inputTitle.maxLength = '100';
   };
 
   checkValidationInputTitle();
@@ -51,10 +51,10 @@
   var inputPrice = noticeForm.querySelector('#price');
 
   var checkValidationInputPrice = function () {
-    inputPrice.setAttribute('required', 'required');
-    inputPrice.setAttribute('value', '1000');
-    inputPrice.setAttribute('min', '0');
-    inputPrice.setAttribute('max', '1000000');
+    inputPrice.required = 'required';
+    inputPrice.value = '1000';
+    inputPrice.min = '0';
+    inputPrice.max = '1000000';
   };
 
   checkValidationInputPrice();
@@ -132,7 +132,7 @@
     setCapacity();
   });
 
-  noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+  noticeForm.action = 'https://js.dump.academy/keksobooking';
 
   noticeForm.addEventListener('submit', function (evt) {
     evt.preventDefault();

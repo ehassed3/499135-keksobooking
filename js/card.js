@@ -53,7 +53,7 @@
     photosList.appendChild(fragmentPhotos);
 
     parent.querySelector('.popup__features').nextElementSibling.textContent = element.offer.description;
-    parent.querySelector('.popup__avatar').setAttribute('src', element.author.avatar);
+    parent.querySelector('.popup__avatar').src = element.author.avatar;
   };
 
   window.card = function (element) {
