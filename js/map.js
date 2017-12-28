@@ -3,7 +3,6 @@
 (function () {
   var PIN_MAIN_SPIRE_HEIGHT = 22;
   var ENTER_KEYCODE = 13;
-  var NUMBER_PINS = 5;
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
@@ -12,18 +11,11 @@
 
   var renderMap = function (listOfRentals) {
     map.classList.remove('map--faded');
-    window.pin.addMapPin(listOfRentals, NUMBER_PINS);
+    window.pin.add(listOfRentals);
 
     noticeForm.classList.remove('notice__form--disabled');
     window.form.disableFieldset(noticeFields, false);
     window.pin.pressPinSide();
-  };
-
-  var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'position: absolute; z-index: 100; font-size: 30px; text-align: center; color: red; background-color: black; opacity: 0.8; left: 0; right: 0;';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
   };
 
   window.backend.load(function (data) {
@@ -48,13 +40,13 @@
     var filters = document.querySelector('.map__filters');
 
     filters.addEventListener('change', function () {
-      var getFilter = function () {
+      var applyFilter = function () {
         window.filter(window.data.value);
       };
 
-      window.debounce(getFilter);
+      window.debounce(applyFilter);
     });
-  }, errorHandler);
+  }, window.error);
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
