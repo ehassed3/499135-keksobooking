@@ -37,7 +37,7 @@
     parent.querySelector('small').textContent = element.offer.address;
     parent.querySelector('.popup__price').innerHTML = element.offer.price + ' &#x20bd;/ночь';
     parent.querySelector('h4').textContent = typesOffer[element.offer.type];
-    parent.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + numDecline(element.offer.rooms, ' комната', ' комнаты', ' комнат') + ' для ' + element.offer.guests + ' гостей';
+    parent.querySelector('h4').nextElementSibling.textContent = element.offer.rooms + numDecline(element.offer.rooms, ' комната', ' комнаты', ' комнат') + ' для ' + element.offer.guests + numDecline(element.offer.guests, ' гостя', ' гостей', ' гостей');
     parent.querySelector('.popup__features').previousElementSibling.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
 
     var featuresList = parent.querySelector('.popup__features');
