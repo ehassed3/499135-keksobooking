@@ -3,6 +3,8 @@
 (function () {
   var PIN_MAIN_SPIRE_HEIGHT = 22;
   var ENTER_KEYCODE = 13;
+  var COORDINATE_Y_MIN = 100;
+  var COORDINATE_Y_MAX = 500;
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
@@ -48,12 +50,21 @@
     });
   }, window.error);
 
+  window.map = {
+    fillAddress: function () {
+      var inputAddress = noticeForm.querySelector('#address');
+      var pinMainImage = mapPinMain.querySelector('img');
+
+      inputAddress.value = 'x: ' + mapPinMain.offsetLeft + ', y: ' + (mapPinMain.offsetTop + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+    }
+  };
+
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var inputAddress = noticeForm.querySelector('#address');
     var pinMainImage = mapPinMain.querySelector('img');
 
-    inputAddress.value = 'x: ' + mapPinMain.offsetLeft + ', y: ' + (mapPinMain.offsetTop + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+    window.map.fillAddress();
 
     var shift = {
       x: evt.clientX - mapPinMain.offsetLeft,
@@ -68,10 +79,10 @@
         y: moveEvt.clientY - shift.y
       };
 
-      if (coordinate.y < 100) {
-        coordinate.y = 100;
-      } else if (coordinate.y > 500) {
-        coordinate.y = 500;
+      if (coordinate.y < COORDINATE_Y_MIN - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) {
+        coordinate.y = COORDINATE_Y_MIN - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+      } else if (coordinate.y > COORDINATE_Y_MAX - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) {
+        coordinate.y = COORDINATE_Y_MAX - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
       }
 
       mapPinMain.style.left = coordinate.x + 'px';

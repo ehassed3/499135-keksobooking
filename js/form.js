@@ -74,7 +74,6 @@
     window.synchronizeFields(selectTimeOut, selectTimeIn, VALUES_SELECT_TIME, VALUES_SELECT_TIME, syncValues);
   });
 
-
   var selectType = noticeForm.querySelector('#type');
 
   var syncValueWithMin = function (index, element, value) {
@@ -139,6 +138,9 @@
 
     window.backend.save(new FormData(noticeForm), function () {
       noticeForm.reset();
+      inputPrice.value = '1000';
+      window.map.fillAddress();
+      setCapacity();
     }, window.error);
   });
 })();
