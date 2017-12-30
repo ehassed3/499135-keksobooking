@@ -54,15 +54,16 @@
     fillAddress: function () {
       var inputAddress = noticeForm.querySelector('#address');
       var pinMainImage = mapPinMain.querySelector('img');
+      var adjustmentHeightPin = pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT;
 
-      inputAddress.value = 'x: ' + mapPinMain.offsetLeft + ', y: ' + (mapPinMain.offsetTop + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+      inputAddress.value = 'x: ' + mapPinMain.offsetLeft + ', y: ' + (mapPinMain.offsetTop + adjustmentHeightPin);
     }
   };
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    var inputAddress = noticeForm.querySelector('#address');
     var pinMainImage = mapPinMain.querySelector('img');
+    var adjustmentHeightPin = pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT;
 
     window.map.fillAddress();
 
@@ -79,16 +80,18 @@
         y: moveEvt.clientY - shift.y
       };
 
-      if (coordinate.y < COORDINATE_Y_MIN - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) {
-        coordinate.y = COORDINATE_Y_MIN - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
-      } else if (coordinate.y > COORDINATE_Y_MAX - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT)) {
-        coordinate.y = COORDINATE_Y_MAX - (pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+      // не используется тернарный оператор, т.к. есть else if
+
+      if (coordinate.y < COORDINATE_Y_MIN - adjustmentHeightPin) {
+        coordinate.y = COORDINATE_Y_MIN - adjustmentHeightPin;
+      } else if (coordinate.y > COORDINATE_Y_MAX - adjustmentHeightPin) {
+        coordinate.y = COORDINATE_Y_MAX - adjustmentHeightPin;
       }
 
       mapPinMain.style.left = coordinate.x + 'px';
       mapPinMain.style.top = coordinate.y + 'px';
 
-      inputAddress.value = 'x: ' + parseInt(mapPinMain.style.left, 0) + ', y: ' + (parseInt(mapPinMain.style.top, 0) + pinMainImage.height / 2 + PIN_MAIN_SPIRE_HEIGHT);
+      window.map.fillAddress();
     };
 
     var mouseUpHandler = function (upEvt) {
