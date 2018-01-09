@@ -133,6 +133,25 @@
 
   noticeForm.action = 'https://js.dump.academy/keksobooking';
 
+  var submitForm = noticeForm.querySelector('.form__submit');
+
+  var checkValidity = function (inputForm) {
+    if (!inputForm.validity.valid) {
+      inputForm.style = 'border: 3px solid red;';
+    }
+
+    inputForm.addEventListener('input', function () {
+      if (inputForm.validity.valid) {
+        inputForm.style = '';
+      }
+    });
+  };
+
+  submitForm.addEventListener('click', function () {
+    checkValidity(inputTitle);
+    checkValidity(inputPrice);
+  });
+
   noticeForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
